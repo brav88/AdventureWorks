@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorks.Models;
-
+using System.Text.Json;
 
 namespace AdventureWorks.Controllers
 {
@@ -26,7 +26,7 @@ namespace AdventureWorks.Controllers
 
             if (user != null)
             {
-                HttpContext.Session.SetString("userName", user.Name);
+                HttpContext.Session.SetString("userName", JsonSerializer.Serialize(user));
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -34,13 +34,14 @@ namespace AdventureWorks.Controllers
                 ViewBag.Error = new Models.Error()
                 {
                     Message = "Incorrect username or password",
-                    BackUrl = "Login"
+                    BackUrl = "Login",
+                    Text = "Try again?"
                 };
 
                 return View("Error");
             }
         }
-
+        
         public User LoadUser(string email, string password)
         {
             List<SqlParameter> param = new List<SqlParameter>()
@@ -56,7 +57,10 @@ namespace AdventureWorks.Controllers
                 User user = new User()
                 {
                     Name = ds.Rows[0]["Name"].ToString(),
-                    Email = email
+                    Email = email,
+                    JobTitle = ds.Rows[0]["JobTitle"].ToString(),
+                    HireDate = Convert.ToDateTime(ds.Rows[0]["HireDate"].ToString()).ToShortDateString(),
+                    Department = ds.Rows[0]["Department"].ToString(),                    
                 };
 
                 return user;

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace AdventureWorks.Controllers
 {
@@ -20,34 +21,31 @@ namespace AdventureWorks.Controllers
         }
 
         public IActionResult Index()
-        {            
-            ViewBag.UserName = HttpContext.Session.GetString("userName");
-
-            if (!string.IsNullOrEmpty(ViewBag.UserName))
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("userName")))
             {
+                ViewBag.User = JsonSerializer.Deserialize<User>(HttpContext.Session.GetString("userName"));
+
                 return View();
             }
             else
             {
                 ViewBag.Error = new Models.Error()
                 {
-                    Message = "Error 404 Page Not Found",
-                    BackUrl = "Login"
+                    Message = "You must log in to see this page",
+                    BackUrl = "Login",
+                    Text = "Go back to Login"
                 };
 
                 return View("Error");
             }
         }
 
-        public IActionResult Privacy()
+        public ActionResult Logout()
         {
-            return View();
-        }
+            HttpContext.Session.Clear();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return RedirectToAction("Index", "Login");
         }
     }
 }
