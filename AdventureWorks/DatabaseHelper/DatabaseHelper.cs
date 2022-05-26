@@ -47,5 +47,34 @@ namespace AdventureWorks.DatabaseHelper
                 throw ex;
             }
         }
+
+        public static void ExecStoreProcedure(string procedure, List<SqlParameter> param)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(strConexion))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandText = procedure;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = conn;
+
+                    if (param != null)
+                    {
+                        foreach (SqlParameter item in param)
+                        {
+                            cmd.Parameters.Add(item);
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

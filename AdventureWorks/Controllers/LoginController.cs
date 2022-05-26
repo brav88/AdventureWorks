@@ -22,7 +22,7 @@ namespace AdventureWorks.Controllers
         [HttpPost]
         public ActionResult LoginUser(string email, string password)
         {
-            User user = LoadUser(email, password);
+            User user = GetUser(email, password);
 
             if (user != null)
             {
@@ -42,7 +42,7 @@ namespace AdventureWorks.Controllers
             }
         }
         
-        public User LoadUser(string email, string password)
+        public User GetUser(string email, string password)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
@@ -50,17 +50,19 @@ namespace AdventureWorks.Controllers
                 new SqlParameter("@password", password)
             };
 
-            DataTable ds = DatabaseHelper.DatabaseHelper.ExecuteStoreProcedure("spIsUserValid", param);
+            DataTable ds = DatabaseHelper.DatabaseHelper.ExecuteStoreProcedure("spGetUser", param);
 
             if (ds.Rows.Count == 1)
             {
                 User user = new User()
                 {
+                    BusinessEntityID = ds.Rows[0]["BusinessEntityID"].ToString(),
                     Name = ds.Rows[0]["Name"].ToString(),
                     Email = email,
                     JobTitle = ds.Rows[0]["JobTitle"].ToString(),
                     HireDate = Convert.ToDateTime(ds.Rows[0]["HireDate"].ToString()).ToShortDateString(),
-                    Department = ds.Rows[0]["Department"].ToString(),                    
+                    Department = ds.Rows[0]["Department"].ToString(),
+                    PhotoPath = ds.Rows[0]["PhotoPath"].ToString(),
                 };
 
                 return user;

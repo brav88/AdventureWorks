@@ -1,13 +1,12 @@
 ﻿using AdventureWorks.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using System.IO;
+using System.Data.SqlClient;
+using System.Data;
+using System.Collections.Generic;
 
 namespace AdventureWorks.Controllers
 {
@@ -35,6 +34,46 @@ namespace AdventureWorks.Controllers
                     Message = "You must log in to see this page",
                     BackUrl = "Login",
                     Text = "Go back to Login"
+                };
+
+                return View("Error");
+            }
+        }
+
+        public ActionResult UpdatePhoto(IFormFile photo)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("userName")) && photo != null)
+            {
+                ViewBag.User = JsonSerializer.Deserialize<User>(HttpContext.Session.GetString("userName"));
+
+                string fileName = ViewBag.User.BusinessEntityID + new FileInfo(photo.FileName).Extension;
+                string filePath = Path.Combine("/Files/", fileName);
+                string localFileName = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files"), fileName);
+
+                using (var stream = new FileStream(localFileName, FileMode.Create))
+                {
+                    photo.CopyTo(stream);
+                }
+
+                List<SqlParameter> param = new List<SqlParameter>()
+                {
+                    new SqlParameter("@BusinessEntityID", ViewBag.User.BusinessEntityID),
+                    new SqlParameter("@PhotoPath", filePath)
+                };
+
+                DatabaseHelper.DatabaseHelper.ExecStoreProcedure("spUpdatePhoto", param);
+
+                ViewBag.User.PhotoPath = filePath;
+
+                return View("Index");
+            }
+            else
+            {
+                ViewBag.Error = new Models.Error()
+                {
+                    Message = "Unhandled error trying to upload photo",
+                    BackUrl = "Home",
+                    Text = "Go back to Home"
                 };
 
                 return View("Error");
