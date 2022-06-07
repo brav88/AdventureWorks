@@ -11,6 +11,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab" aria-controls="sales" aria-selected="false">Sales</button>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -22,7 +25,7 @@
                                     <div class="d-flex text-black">
                                         <div class="flex-shrink-0">
                                             <img src=@ViewBag.User.PhotoPath
-                                                 class="img-fluid" style="width: 180px; border-radius: 10px;">
+                                                 class="img-fluid" style="width: 180px; border-radius: 10px; height:240px">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h5 class="mb-1">@ViewBag.User.Name</h5>
@@ -30,12 +33,12 @@
                                             <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
                                                  style="background-color: #efefef;">
                                                 <div>
-                                                    <p class="small text-muted mb-1">Articles</p>
-                                                    <p class="mb-0">41</p>
+                                                    <p class="small text-muted mb-1">Vacation</p>
+                                                    <p class="mb-0">@ViewBag.User.VacationHours h</p>
                                                 </div>
                                                 <div class="px-3">
-                                                    <p class="small text-muted mb-1">Followers</p>
-                                                    <p class="mb-0">976</p>
+                                                    <p class="small text-muted mb-1">Sick Hours</p>
+                                                    <p class="mb-0">@ViewBag.User.SickLeaveHours h</p>
                                                 </div>
                                                 <div>
                                                     <p class="small text-muted mb-1">Rating</p>
@@ -105,10 +108,30 @@
                                     <p class="mb-0">Address</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                    <p class="text-muted mb-0">@ViewBag.User.Address</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="container">
+                        <div class="ct-chart ct-perfect-fourth"></div>
+                        <script>
+                            var api = new XMLHttpRequest();
+                            api.open("GET", "/Sales/GetSales");
+                            api.send();
+
+                            api.onreadystatechange = function () {
+                                if (this.status == 200 && this.readyState == 4) {
+                                    var data = JSON.parse(this.responseText);
+
+                                    new Chartist.Bar('.ct-chart', data, { width: 600, height: 400 });
+                                }
+                            }                           
+                        </script>
                     </div>
                 </div>
             </div>

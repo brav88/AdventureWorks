@@ -14,7 +14,9 @@ namespace AdventureWorks.Models
         public string JobTitle { get; set; }
         public string Department { get; set; }
         public string HireDate { get; set; }
-
         public string PhotoPath { get; set; }
+        public string Address { get; set; }
+        public int VacationHours { get; set; }
+        public int SickLeaveHours { get; set; }
     }
 }

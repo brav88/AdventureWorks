@@ -41,7 +41,7 @@ namespace AdventureWorks.Controllers
                 return View("Error");
             }
         }
-        
+
         public User GetUser(string email, string password)
         {
             List<SqlParameter> param = new List<SqlParameter>()
@@ -63,10 +63,13 @@ namespace AdventureWorks.Controllers
                     HireDate = Convert.ToDateTime(ds.Rows[0]["HireDate"].ToString()).ToShortDateString(),
                     Department = ds.Rows[0]["Department"].ToString(),
                     PhotoPath = ds.Rows[0]["PhotoPath"].ToString(),
+                    Address = ds.Rows[0]["Address"].ToString(),
+                    VacationHours = Convert.ToInt16(ds.Rows[0]["VacationHours"]),
+                    SickLeaveHours = Convert.ToInt16(ds.Rows[0]["SickLeaveHours"]),
                 };
 
                 return user;
-            }
+            };
 
             return null;
         }
