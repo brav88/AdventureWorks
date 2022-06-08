@@ -9,52 +9,99 @@
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Profile</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
-            </li>
-            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab" aria-controls="sales" aria-selected="false">Sales</button>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="container py-5 h-100">
-                    <div class="row d-flex justify-content-center align-items-center h-100">
-                        <div class="col col-md-9 col-lg-7 col-xl-5">
-                            <div class="card" style="border-radius: 15px;">
-                                <div class="card-body p-4">
-                                    <div class="d-flex text-black">
-                                        <div class="flex-shrink-0">
-                                            <img src=@ViewBag.User.PhotoPath
-                                                 class="img-fluid" style="width: 180px; border-radius: 10px; height:240px">
+                <div class="row mt-2 justify-content-center">
+                    <div class="col col-md-9 col-lg-7 col-xl-5">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-4">
+                                <div class="d-flex text-black">
+                                    <div class="flex-shrink-0">
+                                        <img src=@ViewBag.User.PhotoPath
+                                             class="img-fluid" style="width: 180px; border-radius: 10px; height:240px">
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="mb-1">@ViewBag.User.Name</h5>
+                                        <p class="mb-2 pb-1" style="color: #2b2a2a;">@ViewBag.User.JobTitle</p>
+                                        <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
+                                             style="background-color: #efefef;">
+                                            <div>
+                                                <p class="small text-muted mb-1">Vacation</p>
+                                                <p class="mb-0">@ViewBag.User.VacationHours h</p>
+                                            </div>
+                                            <div class="px-3">
+                                                <p class="small text-muted mb-1">Sick Hours</p>
+                                                <p class="mb-0">@ViewBag.User.SickLeaveHours h</p>
+                                            </div>
+                                            <div>
+                                                <p class="small text-muted mb-1">Rating</p>
+                                                <p class="mb-0">8.5</p>
+                                            </div>
                                         </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h5 class="mb-1">@ViewBag.User.Name</h5>
-                                            <p class="mb-2 pb-1" style="color: #2b2a2a;">@ViewBag.User.JobTitle</p>
-                                            <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
-                                                 style="background-color: #efefef;">
-                                                <div>
-                                                    <p class="small text-muted mb-1">Vacation</p>
-                                                    <p class="mb-0">@ViewBag.User.VacationHours h</p>
-                                                </div>
-                                                <div class="px-3">
-                                                    <p class="small text-muted mb-1">Sick Hours</p>
-                                                    <p class="mb-0">@ViewBag.User.SickLeaveHours h</p>
-                                                </div>
-                                                <div>
-                                                    <p class="small text-muted mb-1">Rating</p>
-                                                    <p class="mb-0">8.5</p>
+                                        <form asp-action="UpdatePhoto" asp-controller="Home" method="post" enctype="multipart/form-data">
+                                            <div class="d-flex pt-1">
+                                                <div class="file-upload-wrapper">
+                                                    <input type="file" name="photo" class="form-control" />
                                                 </div>
                                             </div>
-                                            <form asp-action="UpdatePhoto" asp-controller="Home" method="post" enctype="multipart/form-data">
-                                                <div class="d-flex pt-1">
-                                                    <div class="file-upload-wrapper">
-                                                        <input type="file" name="photo" class="form-control" />
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex pt-1">
-                                                    <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">Update photo</button>
-                                                </div>
-                                            </form>
+                                            <div class="d-flex pt-1">
+                                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">Update photo</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-9 col-lg-7 col-xl-5">
+                        <div class="col-lg-12">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Full Name</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@ViewBag.User.Name</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Email</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@ViewBag.User.Email</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Department</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@ViewBag.User.Department</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Hire Date</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@ViewBag.User.HireDate</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Address</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">@ViewBag.User.Address</p>
                                         </div>
                                     </div>
                                 </div>
@@ -63,74 +110,29 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                <div class="col-lg-8">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Full Name</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@ViewBag.User.Name</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Email</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@ViewBag.User.Email</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Department</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@ViewBag.User.Department</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Hire Date</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@ViewBag.User.HireDate</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Address</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@ViewBag.User.Address</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="container">
-                        <div class="ct-chart ct-perfect-fourth"></div>
-                        <script>
-                            var api = new XMLHttpRequest();
-                            api.open("GET", "/Sales/GetSales");
-                            api.send();
-
-                            api.onreadystatechange = function () {
-                                if (this.status == 200 && this.readyState == 4) {
-                                    var data = JSON.parse(this.responseText);
-                                    new Chartist.Bar('.ct-chart', data, { width: 600, height: 400 });
+                    <div class="row mt-2 justify-content-center">
+                        <div class="col col-md-9 col-lg-7 col-xl-5">
+                            <div class="ct-chart ct-perfect-fourth"></div>
+                            <style type="text/css">
+                                span {
+                                    width: 57px !important;
                                 }
-                            }                           
-                        </script>
+                            </style>
+                            <script>
+                                var api = new XMLHttpRequest();
+                                api.open("GET", "/Sales/GetSales");
+                                api.send();
+
+                                api.onreadystatechange = function () {
+                                    if (this.status == 200 && this.readyState == 4) {
+
+                                        new Chartist.Bar('.ct-chart', JSON.parse(this.responseText), { width: 600, height: 400 });
+                                    }
+                                }
+                            </script>
+                        </div>
                     </div>
                 </div>
             </div>

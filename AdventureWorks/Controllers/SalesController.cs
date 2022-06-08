@@ -22,35 +22,19 @@ namespace AdventureWorks.Controllers
 
             if (ds.Rows.Count > 0)
             {
-
                 List<string> labelsList = new List<string>();
+                List<List<long>> seriesList = new List<List<long>>();
+                List<long> series = new List<long>();
 
                 foreach (DataRow dr in ds.Rows)
                 {
                     labelsList.Add(dr["years"].ToString());
+                    series.Add(Convert.ToInt64(dr["sales"]));
                 }
 
-                List<List<long>> seriesList = new List<List<long>>();
+                seriesList.Add(series);
 
-                foreach (DataRow dr in ds.Rows)
-                {
-                    seriesList.Add(new List<long> { Convert.ToInt64(dr["sales"]) });
-                }
-
-                //LINQ
-                /*seriesList = (from DataRow dr in ds.Rows
-                              select new List<Int64>()
-                              {
-                                  Convert.ToInt64(dr["sales"]),
-                              }).ToList();*/
-
-                Data data = new Data()
-                {
-                    labels = labelsList,
-                    series = seriesList
-                };
-
-                return Json(data);
+                return Json(new Data() { labels = labelsList, series= seriesList });
             }
 
             return null;
