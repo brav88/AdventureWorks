@@ -13,47 +13,47 @@ namespace AdventureWorks.Controllers
         public class Data
         {
             public List<string> labels { get; set; }
-            public List<List<int>> series { get; set; }
+            public List<List<long>> series { get; set; }
         }
 
         public ActionResult GetSales()
         {
-            List<List<int>> seriesList = SeriesListUsingLinq();
+            DataTable ds = DatabaseHelper.DatabaseHelper.ExecuteStoreProcedure("spGetSales", null);
 
-            Data data = new Data()
+            if (ds.Rows.Count > 0)
             {
-                labels = new List<string>(new string[] { "2017", "2018", "2019", "2020", "2021" }),
-                series = seriesList,
-            };
 
-            return Json(data);
-        }
+                List<string> labelsList = new List<string>();
 
-        public List<List<int>> SeriesListUsingLinq()
-        {            
-            DataTable dt = new DataTable("Sales");
-            dt.Columns.Add("column1", typeof(Int32));
-            dt.Columns.Add("column2", typeof(Int32));
-            dt.Columns.Add("column3", typeof(Int32));
-            dt.Columns.Add("column4", typeof(Int32));
-            dt.Columns.Add("column5", typeof(Int32));
-            //Data  
-            dt.Rows.Add(1, 2, 3, 4, 5);
-            dt.Rows.Add(6, 1, 5, 2, 3);
+                foreach (DataRow dr in ds.Rows)
+                {
+                    labelsList.Add(dr["years"].ToString());
+                }
 
-            List<List<int>> seriesList = new List<List<int>>();
+                List<List<long>> seriesList = new List<List<long>>();
 
-            seriesList = (from DataRow dr in dt.Rows
-                           select new List<int>()
-                           {                               
-                               Convert.ToInt32(dr["column1"]),
-                               Convert.ToInt32(dr["column2"]),
-                               Convert.ToInt32(dr["column3"]),
-                               Convert.ToInt32(dr["column4"]),
-                               Convert.ToInt32(dr["column5"]),
-                           }).ToList();
+                foreach (DataRow dr in ds.Rows)
+                {
+                    seriesList.Add(new List<long> { Convert.ToInt64(dr["sales"]) });
+                }
 
-            return seriesList;
+                //LINQ
+                /*seriesList = (from DataRow dr in ds.Rows
+                              select new List<Int64>()
+                              {
+                                  Convert.ToInt64(dr["sales"]),
+                              }).ToList();*/
+
+                Data data = new Data()
+                {
+                    labels = labelsList,
+                    series = seriesList
+                };
+
+                return Json(data);
+            }
+
+            return null;
         }
     }
 }

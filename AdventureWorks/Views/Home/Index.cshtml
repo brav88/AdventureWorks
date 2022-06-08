@@ -127,7 +127,6 @@
                             api.onreadystatechange = function () {
                                 if (this.status == 200 && this.readyState == 4) {
                                     var data = JSON.parse(this.responseText);
-
                                     new Chartist.Bar('.ct-chart', data, { width: 600, height: 400 });
                                 }
                             }                           
