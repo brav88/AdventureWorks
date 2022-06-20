@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Product Page";
+}
+
+
+<div class="container" style="width:50%;margin-top:0%">
+    <div class="card" style="border-radius: 15px;">
+        <div class="card-body">
+
+            <select id="ddlCategories" class="form-select" aria-label="Default select example" onchange="LoadSubCategories()">
+                <option selected>Open this select menu</option>
+                @foreach (var item in @ViewBag.Categories)
+                {
+                    <option value="@item.Id">@item.Value</option>
+                }
+            </select>
+
+            <select id="ddlSubCategories" class="form-select mt-1" aria-label="Default select example">
+                <option selected>Open this select menu</option>
+            </select>
+
+            <script type="text/javascript">
+
+                function LoadSubCategories()
+                {
+                    debugger;
+                    var api = new XMLHttpRequest();
+                    api.open("GET", "/Product/LoadSubCategories/"+document.querySelector("#ddlCategories").value);
+                    api.send();
+
+                    api.onreadystatechange = function () {
+
+                        if (this.status == 200 && this.readyState == 4) {
+
+                            let data = JSON.parse(this.responseText);
+                            var html;
+
+                            data.forEach((item) => {
+                                html = html + "<option value="+item.id+">"+item.value+"</option>"
+                            });
+
+                            document.querySelector("#ddlSubCategories").innerHTML = html;
+                        }
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</div>

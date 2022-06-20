@@ -9,7 +9,7 @@ namespace AdventureWorks.DatabaseHelper
 {
     public class DatabaseHelper
     {
-        const string servidor = @"LAP-BSANDI\MSSQLSERVER15";
+        const string servidor = @"DESKTOP-FCN7H8J";
         const string baseDatos = "AdventureWorks2019";
         const string strConexion = "Data Source=" + servidor + ";Initial Catalog=" + baseDatos + ";Integrated Security=True";
 
