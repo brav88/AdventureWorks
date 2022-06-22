@@ -18,6 +18,7 @@ namespace AdventureWorks.Controllers
             {
                 ViewBag.User = JsonSerializer.Deserialize<User>(HttpContext.Session.GetString("userName"));
                 ViewBag.Categories = LoadCategories();
+                ViewBag.Products = new List<Product>();
 
                 return View();
             }
@@ -32,6 +33,34 @@ namespace AdventureWorks.Controllers
 
                 return View("Error");
             }
+        }
+
+        public ActionResult LoadProducts(int subCategoryId)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@id", subCategoryId),
+            };
+
+            DataTable ds = DatabaseHelper.DatabaseHelper.ExecuteStoreProcedure("spGetProducts", param);
+            List<Product> productList = new List<Product>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                productList.Add(new Product()
+                {
+                    ProductID = Convert.ToInt16(row["ProductID"]),
+                    ProductNumber = row["ProductNumber"].ToString(),
+                    Name = row["Name"].ToString(),
+                    ListPrice = Convert.ToDecimal(row["ListPrice"]).ToString("#.##"),
+                    Color = row["Color"].ToString(),
+                });
+            }
+
+            ViewBag.Products = productList;
+            ViewBag.Categories = LoadCategories();
+
+            return View("Index");
         }
 
         private List<Catalog> LoadCategories()
